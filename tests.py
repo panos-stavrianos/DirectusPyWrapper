@@ -2,11 +2,17 @@ import os
 import unittest
 from datetime import datetime
 
-from directus import Directus, Operators, LogicalOperators, Filter, _and, _or
 from rich import print
 
-from directus_response import DirectusResponse
 from dotenv import load_dotenv
+
+from DirectusPyWrapper import Directus
+from DirectusPyWrapper._and import _and
+from DirectusPyWrapper._or import _or
+from DirectusPyWrapper.directus_response import DirectusResponse
+from DirectusPyWrapper.filter import Filter
+from DirectusPyWrapper.logical_operators import LogicalOperators
+from DirectusPyWrapper.operators import Operators
 
 load_dotenv()
 url = os.environ['DIRECTUS_URL']
