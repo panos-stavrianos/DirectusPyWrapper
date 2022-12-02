@@ -4,7 +4,7 @@ from abc import abstractmethod, ABC
 from enum import Enum
 from typing import Optional
 
-import requests as requests
+import requests
 
 
 class BearerAuth(requests.auth.AuthBase):
