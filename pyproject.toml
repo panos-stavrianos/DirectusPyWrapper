@@ -1,17 +1,28 @@
 [project]
 name = "DirectusPyWrapper"
 version = "0.0.1"
-dynamic = ["dependencies"]
+description = "A python wrapper for Directus API"
+readme = "README.md"
+requires-python = ">=3.6"
+keywords = ["directus", "wrapper", "api"]
 authors = [
     { name = "Panos Stavrianos" }
 ]
+maintainers = [
+    { name = "Panos Stavrianos" }
+]
 
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+dependencies = [
+    "python-dotenv~=0.21.0",
+    "rich~=12.6.0",
+    "requests~=2.28.1",
+    "json_fix~=0.5.1"
+]
 
+[project.optional-dependencies]
+test = [
+    "rich~=12.6.0",
+]
 
-[tool.setuptools.dynamic]
-dependencies = { file = ["requirements.txt"] }
-
-
+[project.urls]
+repository = "https://github.com/panos-stavrianos/DirectusPyWrapper"
