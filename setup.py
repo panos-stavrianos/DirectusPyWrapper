@@ -3,7 +3,7 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
-    name="DirectusPyWrapper-panos-stavrianos",  # Replace with your own username
+    name="DirectusPyWrapper",  # Replace with your own username
     version="0.0.1",
     author="Panos Stavrianos",
     description="A python wrapper for Directus API",
