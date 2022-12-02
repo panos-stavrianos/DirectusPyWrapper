@@ -1,1 +1,1 @@
-from . import directus
+import DirectusPyWrapper.directus as d
