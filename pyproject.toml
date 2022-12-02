@@ -26,6 +26,3 @@ test = [
 
 [project.urls]
 repository = "https://github.com/panos-stavrianos/DirectusPyWrapper"
-
-[tool.setuptools]
-py-modules = []
