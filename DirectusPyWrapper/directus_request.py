@@ -1,11 +1,10 @@
 from __future__ import annotations
 import json_fix
-from directus import Directus, Operators, LogicalOperators, Logical, _and, Filter
-from directus_response import DirectusResponse
+
+from DirectusPyWrapper import Directus, Operators, DirectusResponse, _and, Logical, LogicalOperators, Filter
 
 
 class DirectusRequest:
-
     def __init__(self, directus: Directus, collection: str):
         json_fix.fix_it()
         self.directus: Directus = directus

@@ -3,7 +3,6 @@ import requests
 
 
 class DirectusResponse:
-
     def __init__(self, response: requests.Response):
         self.response: requests.Response = response
         try:

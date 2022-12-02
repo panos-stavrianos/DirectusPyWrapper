@@ -3,7 +3,6 @@ import json
 from abc import abstractmethod, ABC
 from enum import Enum
 from typing import Optional
-
 import requests
 
 
