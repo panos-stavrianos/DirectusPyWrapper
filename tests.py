@@ -2,6 +2,7 @@ import os
 import unittest
 from datetime import datetime
 
+import requests
 from dotenv import load_dotenv
 from rich import print
 
@@ -22,8 +23,22 @@ token = os.environ['DIRECTUS_TOKEN']
 
 
 class TestDirectus(unittest.TestCase):
+    def test_multiple_users_same_session(self):
+        session = requests.Session()
+        directus1 = Directus(url, token=token, session=session)
 
-    # Path: directus.py
+        directus2 = Directus(url, token=token, session=session)
+        for _ in range(50):
+            response1: DirectusResponse = directus1.read_me()
+            response2: DirectusResponse = directus2.read_me()
+
+            self.assertIsNotNone(response1.item)
+            self.assertIsNotNone(response2.item)
+        directus1.logout()
+        directus2.logout()
+
+        # Path: directus.py
+
     def test_login(self):
         with Directus(url, email, password) as directus:
             self.assertIsNotNone(directus._token)

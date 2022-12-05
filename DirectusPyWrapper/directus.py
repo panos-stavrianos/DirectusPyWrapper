@@ -7,7 +7,7 @@ from DirectusPyWrapper.directus_request import DirectusRequest
 
 
 class BearerAuth(requests.auth.AuthBase):
-    def __init__(self, token):
+    def __init__(self, token: str):
         self.token = token
 
     def __call__(self, r):
@@ -15,13 +15,21 @@ class BearerAuth(requests.auth.AuthBase):
         return r
 
 
-class DirectusBase:
-    def __init__(self, url):
+class Directus:
+    def __init__(self, url, email=None, password=None, token=None, session: requests.Session = None):
         self.expires = None
         self.expiration_time = None
         self.refresh_token = None
         self.url: str = url
-        self.session = requests.Session()
+        self._token: Optional[str] = None
+        self.email = email
+        self.password = password
+        self.static_token = token
+        self.session = session or requests.Session()
+        self.auth = BearerAuth(self._token)
+        self.token = self.static_token or None
+        if self.email and self.password:
+            self.login()
 
     def items(self, collection):
         return DirectusRequest(self, collection)
@@ -31,21 +39,6 @@ class DirectusBase:
 
     def __enter__(self):
         return self
-
-
-class Directus(DirectusBase):
-    def __init__(self, url, email=None, password=None, static_token=None):
-        super().__init__(url)
-        self._token: Optional[str] = None
-        self.email = email
-        self.password = password
-        self.static_token = static_token
-        self.auth=BearerAuth(self._token)
-        if self.static_token:
-            self.token = self.static_token
-            return
-        if self.email and self.password:
-            self.login()
 
     @property
     def token(self):
