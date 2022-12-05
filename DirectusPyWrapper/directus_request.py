@@ -30,7 +30,17 @@ class DirectusRequest:
     def filter(self, operator: Operators = Operators.Equals,
                logical_operator: LogicalOperators = LogicalOperators.And,
                **filters):
+        """
+        :param operator: The operator to use for the filter
+        :param logical_operator: The logical operator to use for the filter
+        :param filters: Multiple filters to use
 
+        :return: The DirectusRequest object
+
+        :example:
+                .filter(Operators.Equals, LogicalOperators.Or, first_name="Panos", location=None) \
+                .filter(Operators.Equals, last_name="Stavrianos") \
+        """
         filter_param = Filter(operator, logical_operator, **filters)
         if 'filter' in self.params:
             if isinstance(self.params['filter'], Logical):

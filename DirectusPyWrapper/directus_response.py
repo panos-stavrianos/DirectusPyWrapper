@@ -3,9 +3,9 @@ import requests
 
 
 class DirectusResponse:
-    def __init__(self, response: requests.Response, payload: dict = None):
+    def __init__(self, response: requests.Response, query: dict = None):
         self.response: requests.Response = response
-        self.payload: dict = payload
+        self.query: dict = query
         try:
             self.json: dict = response.json()
             if self.is_error:
