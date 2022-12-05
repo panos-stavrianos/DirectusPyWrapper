@@ -63,6 +63,9 @@ class Directus:
     def items(self, collection):
         return DirectusRequest(self, collection)
 
+    def read_me(self):
+        return DirectusRequest(self, "directus_users").read_one("me")
+
     def logout(self):
         url = f'{self.url}/auth/logout'
         response = self.session.post(url)

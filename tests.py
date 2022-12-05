@@ -38,6 +38,14 @@ class TestDirectus(unittest.TestCase):
             print(response.item)
             self.assertIsNotNone(response.item)
 
+    def test_read_me(self):
+        with Directus(url, email, password) as directus:
+            response: DirectusResponse = directus.read_me()
+            print(response.errors)
+            print(response.item)
+            self.assertTrue(response.is_success)
+            self.assertIsNotNone(response.item)
+
     # Path: directus_request.py
     def test_read_many(self):
         with Directus(url, email, password) as directus:
