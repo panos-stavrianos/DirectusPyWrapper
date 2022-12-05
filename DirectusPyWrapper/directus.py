@@ -27,7 +27,7 @@ class Directus:
         self._token: Optional[str] = None
         self.session = requests.Session()
         if self.static_token:
-            self._token = self.static_token
+            self.token = self.static_token
             return
         if self.email and self.password:
             self.login()
