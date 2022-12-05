@@ -2,6 +2,8 @@ import setuptools
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
+with open('requirements.txt') as f:
+    required = f.read().splitlines()
 setuptools.setup(
     name="DirectusPyWrapper",  # Replace with your own username
     version="0.0.1",
@@ -13,5 +15,5 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     classifiers=["directus", "wrapper", "api"],
     python_requires='>=3.6',
-    requires=['requests', 'rich', 'json_fix', 'python-dotenv']
+    install_requires=required,
 )
