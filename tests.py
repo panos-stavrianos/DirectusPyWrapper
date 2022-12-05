@@ -18,6 +18,7 @@ load_dotenv()
 url = os.environ['DIRECTUS_URL']
 email = os.environ['DIRECTUS_EMAIL']
 password = os.environ['DIRECTUS_PASSWORD']
+token = os.environ['DIRECTUS_TOKEN']
 
 
 class TestDirectus(unittest.TestCase):
@@ -25,11 +26,12 @@ class TestDirectus(unittest.TestCase):
     # Path: directus.py
     def test_login(self):
         with Directus(url, email, password) as directus:
-            self.assertIsNotNone(directus.token)
+            self.assertIsNotNone(directus._token)
 
     # Path: directus_request.py
     def test_read_one(self):
-        with Directus(url, email, password) as directus:
+        with Directus(url) as directus:
+            directus.token = token
             response: DirectusResponse = directus.items('directus_users').read_one(
                 "5c4a0fbc-d454-4094-bbf4-5f72f4e57098")
             print(response.errors)

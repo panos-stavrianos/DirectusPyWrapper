@@ -24,17 +24,26 @@ class Directus:
         self.email: str = email
         self.password: str = password
         self.static_token: str = static_token
-        self.token: Optional[str] = None
+        self._token: Optional[str] = None
         self.session = requests.Session()
         if self.static_token:
-            self.token = self.static_token
+            self._token = self.static_token
             return
         if self.email and self.password:
             self.login()
 
+    @property
+    def token(self):
+        return self._token
+
+    @token.setter
+    def token(self, token):
+        self._token = token
+        self.session.auth = BearerAuth(self._token)
+
     def login(self):
         if self.static_token:
-            self.token = self.static_token
+            self._token = self.static_token
             return
 
         url = f'{self.url}/auth/login'
@@ -44,12 +53,12 @@ class Directus:
         }
 
         response = self.session.post(url, json=payload)
-        self.token = response.json()['data']['access_token']
+        self._token = response.json()['data']['access_token']
         self.refresh_token = response.json()['data']['refresh_token']
         self.expires = response.json()['data']['expires']  # in milliseconds
         self.expiration_time: datetime.datetime = datetime.datetime.now() + datetime.timedelta(
             milliseconds=self.expires)
-        self.session.auth = BearerAuth(self.token)
+        self.session.auth = BearerAuth(self._token)
 
     def items(self, collection):
         return DirectusRequest(self, collection)
