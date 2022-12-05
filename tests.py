@@ -33,7 +33,7 @@ class TestDirectus(unittest.TestCase):
         with Directus(url) as directus:
             directus.token = token
             response: DirectusResponse = directus.items('directus_users').read_one(
-                "5c4a0fbc-d454-4094-bbf4-5f72f4e57098")
+                "5c4a0fbc-d454-4094-bbf4-5f72f4e57098!")
             print(response.errors)
             print(response.item)
             self.assertIsNotNone(response.item)

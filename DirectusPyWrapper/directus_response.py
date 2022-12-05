@@ -7,6 +7,8 @@ class DirectusResponse:
         self.response: requests.Response = response
         try:
             self.json: dict = response.json()
+            if self.is_error:
+                raise DirectusException(self)
         except json.decoder.JSONDecodeError:
             self.json = {}
 
@@ -41,8 +43,15 @@ class DirectusResponse:
         return not self.is_success
 
     @property
-    def errors(self) -> dict:
+    def errors(self) -> list:
         if self.is_error and 'errors' in self.json:
-            return {"errors": self.json['errors'],
-                    "response": self.response.__dict__
-                    }
+            return self.json['errors']
+
+
+class DirectusException(Exception):
+    def __init__(self, response: DirectusResponse):
+        self.response = response
+        self.messages = response.errors
+
+    def __str__(self):
+        return ''.join(f"{error['extensions']['code']}:\n{error['message']}\n " for error in self.messages)
