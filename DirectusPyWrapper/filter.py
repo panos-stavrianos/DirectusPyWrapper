@@ -33,4 +33,3 @@ class Filter(FilterBase):
             params = params[self.logical_operator][0]
 
         return params
-

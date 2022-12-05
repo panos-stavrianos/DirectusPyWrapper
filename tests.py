@@ -2,13 +2,13 @@ import os
 import unittest
 from datetime import datetime
 
-from rich import print
-
 from dotenv import load_dotenv
+from rich import print
 
 from DirectusPyWrapper import Directus
 from DirectusPyWrapper._and import _and
 from DirectusPyWrapper._or import _or
+from DirectusPyWrapper.aggregation_operators import AggregationOperators
 from DirectusPyWrapper.directus_response import DirectusResponse
 from DirectusPyWrapper.filter import Filter
 from DirectusPyWrapper.logical_operators import LogicalOperators
@@ -68,6 +68,18 @@ class TestDirectus(unittest.TestCase):
             print(response.errors)
             print("counts", response.filtered_count, response.total_count)
             print(response.items)
+            self.assertTrue(response.is_success)
+            self.assertIsNotNone(response.items)
+
+    # Path: directus_request.py
+    def test_aggregate(self):
+        with Directus(url, email, password) as directus:
+            response: DirectusResponse = directus.items('directus_users') \
+                .aggregate(AggregationOperators.Count).read_many()
+            print(response.errors)
+            print(response.query)
+
+            print(response.item)
             self.assertTrue(response.is_success)
             self.assertIsNotNone(response.items)
 

@@ -1,7 +1,9 @@
 from __future__ import annotations
+
 import json_fix
 
 from DirectusPyWrapper._and import _and
+from DirectusPyWrapper.aggregation_operators import AggregationOperators
 from DirectusPyWrapper.directus_response import DirectusResponse
 from DirectusPyWrapper.filter import Filter
 from DirectusPyWrapper.logical import Logical
@@ -78,6 +80,10 @@ class DirectusRequest:
 
     def include_count(self):
         self.params['meta'] = '*'
+        return self
+
+    def aggregate(self, operator: AggregationOperators = AggregationOperators.Count, field='*'):
+        self.params['aggregate'] = {operator.value: field}
         return self
 
     def read_one(self, id: int | str) -> DirectusResponse:

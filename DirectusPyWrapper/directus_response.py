@@ -1,4 +1,5 @@
 import json
+
 import requests
 
 
@@ -15,11 +16,21 @@ class DirectusResponse:
 
     @property
     def item(self) -> dict:
-        return None if 'data' not in self.json else self.json['data']
+        if 'data' not in self.json:
+            return {}
+        if isinstance(self.json['data'], list):
+            return self.json['data'][0]
+        else:
+            return self.json['data']
 
     @property
     def items(self) -> list:
-        return None if 'data' not in self.json else self.json['data']
+        if 'data' not in self.json:
+            return []
+        if isinstance(self.json['data'], list):
+            return self.json['data']
+        else:
+            return [self.json['data']]
 
     @property
     def total_count(self) -> int:
