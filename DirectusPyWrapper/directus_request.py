@@ -76,7 +76,7 @@ class DirectusRequest:
 
     def read_many(self) -> DirectusResponse:
         response = self.directus.session.request("search", self.uri, json={"query": self.params})
-        return DirectusResponse(response)
+        return DirectusResponse(response, self.params)
 
     def create_one(self, item: dict) -> DirectusResponse:
         response = self.directus.session.post(self.uri, json=item)
