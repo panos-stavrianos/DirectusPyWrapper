@@ -87,23 +87,23 @@ class DirectusRequest:
         return self
 
     def read_one(self, id: int | str) -> DirectusResponse:
-        response = self.directus.session.get(f'{self.uri}/{id}')
+        response = self.directus.session.get(f'{self.uri}/{id}', auth=self.directus.auth)
         return DirectusResponse(response)
 
     def read_many(self) -> DirectusResponse:
-        response = self.directus.session.request("search", self.uri, json={"query": self.params})
+        response = self.directus.session.request("search", self.uri, json={"query": self.params}, auth=self.directus.auth)
         return DirectusResponse(response, self.params)
 
     def create_one(self, item: dict) -> DirectusResponse:
-        response = self.directus.session.post(self.uri, json=item)
+        response = self.directus.session.post(self.uri, json=item, auth=self.directus.auth)
         return DirectusResponse(response)
 
     def create_many(self, items: list[dict]) -> DirectusResponse:
-        response = self.directus.session.post(self.uri, json=items)
+        response = self.directus.session.post(self.uri, json=items, auth=self.directus.auth)
         return DirectusResponse(response)
 
     def update_one(self, id: int | str, item: dict) -> DirectusResponse:
-        response = self.directus.session.patch(f'{self.uri}/{id}', json=item)
+        response = self.directus.session.patch(f'{self.uri}/{id}', json=item, auth=self.directus.auth)
         return DirectusResponse(response)
 
     def update_many(self, ids: list[int | str], items) -> DirectusResponse:
@@ -111,13 +111,13 @@ class DirectusRequest:
             "keys": ids,
             "data": items
         }
-        response = self.directus.session.patch(self.uri, json=payload)
+        response = self.directus.session.patch(self.uri, json=payload, auth=self.directus.auth)
         return DirectusResponse(response)
 
     def delete_one(self, id: int | str) -> DirectusResponse:
-        response = self.directus.session.delete(f'{self.uri}/{id}')
+        response = self.directus.session.delete(f'{self.uri}/{id}', auth=self.directus.auth)
         return DirectusResponse(response)
 
     def delete_many(self, ids: list[int | str]) -> DirectusResponse:
-        response = self.directus.session.delete(self.uri, json=ids)
+        response = self.directus.session.delete(self.uri, json=ids, auth=self.directus.auth)
         return DirectusResponse(response)

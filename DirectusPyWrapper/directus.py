@@ -15,17 +15,32 @@ class BearerAuth(requests.auth.AuthBase):
         return r
 
 
-class Directus:
-    def __init__(self, url, email=None, password=None, static_token=None):
+class DirectusBase:
+    def __init__(self, url):
         self.expires = None
         self.expiration_time = None
         self.refresh_token = None
         self.url: str = url
-        self.email: str = email
-        self.password: str = password
-        self.static_token: str = static_token
-        self._token: Optional[str] = None
         self.session = requests.Session()
+
+    def items(self, collection):
+        return DirectusRequest(self, collection)
+
+    def read_me(self):
+        return DirectusRequest(self, "directus_users").read_one("me")
+
+    def __enter__(self):
+        return self
+
+
+class Directus(DirectusBase):
+    def __init__(self, url, email=None, password=None, static_token=None):
+        super().__init__(url)
+        self._token: Optional[str] = None
+        self.email = email
+        self.password = password
+        self.static_token = static_token
+        self.auth=BearerAuth(self._token)
         if self.static_token:
             self.token = self.static_token
             return
@@ -39,7 +54,7 @@ class Directus:
     @token.setter
     def token(self, token):
         self._token = token
-        self.session.auth = BearerAuth(self._token)
+        self.auth = BearerAuth(self._token)
 
     def login(self):
         if self.static_token:
@@ -60,21 +75,12 @@ class Directus:
             milliseconds=self.expires)
         self.session.auth = BearerAuth(self._token)
 
-    def items(self, collection):
-        return DirectusRequest(self, collection)
-
-    def read_me(self):
-        return DirectusRequest(self, "directus_users").read_one("me")
-
     def logout(self):
         url = f'{self.url}/auth/logout'
         response = self.session.post(url)
         self.session.auth = None
         self.session.close()
-        return response.status_code == 204
-
-    def __enter__(self):
-        return self
+        return response.status_code == 200
 
     def __exit__(self, *args):
         # Exception handling here

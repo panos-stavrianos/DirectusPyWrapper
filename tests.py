@@ -39,7 +39,8 @@ class TestDirectus(unittest.TestCase):
             self.assertIsNotNone(response.item)
 
     def test_read_me(self):
-        with Directus(url, email, password) as directus:
+        with Directus(url) as directus:
+            directus.token = token
             response: DirectusResponse = directus.read_me()
             print(response.errors)
             print(response.item)
