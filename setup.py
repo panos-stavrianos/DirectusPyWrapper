@@ -13,4 +13,5 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     classifiers=["directus", "wrapper", "api"],
     python_requires='>=3.6',
+    requires=['requests', 'rich', 'json_fix', 'python-dotenv']
 )
