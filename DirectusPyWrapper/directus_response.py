@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import json
+from typing import Any
 
 import requests
 
@@ -15,18 +18,24 @@ class DirectusResponse:
             self.json = {}
 
     @property
-    def item(self) -> dict:
+    def item(self) -> dict[Any, Any] | None | Any:
         if 'data' not in self.json:
-            return {}
+            return None
         if not isinstance(self.json['data'], list):
             return self.json['data']
-        return {} if len(self.json['data']) == 0 else self.json['data'][0]
+        return None if len(self.json['data']) == 0 else self.json['data'][0]
 
     @property
-    def items(self) -> list:
+    def first(self) -> dict:
+        return self.item
+
+    @property
+    def items(self) -> list[Any] | None | Any:
         if 'data' not in self.json:
-            return []
+            return None
         if isinstance(self.json['data'], list):
+            if len(self.json['data']) == 0:
+                return None
             return self.json['data']
         else:
             return [self.json['data']]
