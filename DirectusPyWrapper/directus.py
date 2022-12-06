@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 import datetime
 from typing import Optional
 
 import requests
 
 from DirectusPyWrapper.directus_request import DirectusRequest
+from DirectusPyWrapper.models import User
 
 
 class BearerAuth(requests.auth.AuthBase):
@@ -28,6 +31,7 @@ class Directus:
         self.session = session or requests.Session()
         self.auth = BearerAuth(self._token)
         self.token = self.static_token or None
+        self._user: User | None = None
         if self.email and self.password:
             self.login()
 
@@ -48,6 +52,12 @@ class Directus:
     def token(self, token):
         self._token = token
         self.auth = BearerAuth(self._token)
+
+    @property
+    def user(self):
+        if self._user is None:
+            self._user = User(**self.read_me().item)
+        return self._user
 
     def login(self):
         if self.static_token:
