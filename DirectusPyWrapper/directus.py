@@ -66,14 +66,16 @@ class Directus:
         self.expires = response.json()['data']['expires']  # in milliseconds
         self.expiration_time: datetime.datetime = datetime.datetime.now() + datetime.timedelta(
             milliseconds=self.expires)
-        self.session.auth = BearerAuth(self._token)
+        self.auth = BearerAuth(self._token)
 
     def logout(self):
         url = f'{self.url}/auth/logout'
         response = self.session.post(url)
         self.session.auth = None
-        self.session.close()
         return response.status_code == 200
+
+    def close_session(self):
+        self.session.close()
 
     def __exit__(self, *args):
         # Exception handling here

@@ -33,12 +33,9 @@ class DirectusResponse:
     def items(self) -> list[Any] | None | Any:
         if 'data' not in self.json:
             return None
-        if isinstance(self.json['data'], list):
-            if len(self.json['data']) == 0:
-                return None
-            return self.json['data']
-        else:
+        if not isinstance(self.json['data'], list):
             return [self.json['data']]
+        return None if len(self.json['data']) == 0 else self.json['data']
 
     @property
     def total_count(self) -> int:
