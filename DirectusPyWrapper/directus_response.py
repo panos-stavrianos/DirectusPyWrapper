@@ -18,10 +18,9 @@ class DirectusResponse:
     def item(self) -> dict:
         if 'data' not in self.json:
             return {}
-        if isinstance(self.json['data'], list):
-            return self.json['data'][0]
-        else:
+        if not isinstance(self.json['data'], list):
             return self.json['data']
+        return {} if len(self.json['data']) == 0 else self.json['data'][0]
 
     @property
     def items(self) -> list:
