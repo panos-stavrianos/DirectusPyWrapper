@@ -10,7 +10,7 @@ from DirectusPyWrapper import Directus
 from DirectusPyWrapper._and import _and
 from DirectusPyWrapper._or import _or
 from DirectusPyWrapper.aggregation_operators import AggregationOperators
-from DirectusPyWrapper.directus_response import DirectusResponse
+from DirectusPyWrapper.directus_response import DirectusResponse, DirectusException
 from DirectusPyWrapper.filter import Filter
 from DirectusPyWrapper.logical_operators import LogicalOperators
 from DirectusPyWrapper.operators import Operators
@@ -42,6 +42,16 @@ class TestDirectus(unittest.TestCase):
     def test_login(self):
         with Directus(url, email, password) as directus:
             self.assertIsNotNone(directus._token)
+
+    def test_failed_login(self):
+        with self.assertRaises(DirectusException) as _:
+            try:
+                with Directus(url, email, f"{password}!!") as directus:
+                    print("context.exception")
+                    self.assertIsNone(directus._token)
+            except DirectusException as e:
+                print(e)
+                raise e
 
     # Path: directus_request.py
     def test_read_one(self):

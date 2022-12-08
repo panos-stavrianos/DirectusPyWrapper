@@ -6,6 +6,7 @@ from typing import Optional
 import requests
 
 from DirectusPyWrapper.directus_request import DirectusRequest
+from DirectusPyWrapper.directus_response import DirectusResponse
 from DirectusPyWrapper.models import User
 
 
@@ -70,10 +71,11 @@ class Directus:
             'password': self.password
         }
 
-        response = self.session.post(url, json=payload)
-        self._token = response.json()['data']['access_token']
-        self.refresh_token = response.json()['data']['refresh_token']
-        self.expires = response.json()['data']['expires']  # in milliseconds
+        r = self.session.post(url, json=payload)
+        response = DirectusResponse(r)
+        self._token = response.item['access_token']
+        self.refresh_token = response.item['refresh_token']
+        self.expires = response.item['expires']  # in milliseconds
         self.expiration_time: datetime.datetime = datetime.datetime.now() + datetime.timedelta(
             milliseconds=self.expires)
         self.auth = BearerAuth(self._token)
