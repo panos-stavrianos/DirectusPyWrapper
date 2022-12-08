@@ -80,6 +80,18 @@ class Directus:
             milliseconds=self.expires)
         self.auth = BearerAuth(self._token)
 
+    def refresh(self):
+        url = f'{self.url}/auth/refresh'
+        payload = {
+            'refresh_token': self.refresh_token,
+            "mode": "json"
+        }
+        r = self.session.post(url, json=payload)
+        response = DirectusResponse(r)
+        self._token = response.item['access_token']
+        self.refresh_token = response.item['refresh_token']
+        self.expires = response.item['expires']
+
     def logout(self):
         url = f'{self.url}/auth/logout'
         response = self.session.post(url)
