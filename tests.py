@@ -53,6 +53,13 @@ class TestDirectus(unittest.TestCase):
                 print(e.message)
                 raise e
 
+    def test_refresh_token(self):
+        with Directus(url, email, password) as directus:
+            token = directus.token
+            directus.refresh()
+            print(directus.user)
+            self.assertNotEqual(token, directus.token)
+
     # Path: directus_request.py
     def test_read_one(self):
         with Directus(url) as directus:
