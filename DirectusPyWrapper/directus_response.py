@@ -68,7 +68,13 @@ class DirectusResponse:
 class DirectusException(Exception):
     def __init__(self, response: DirectusResponse):
         self.response = response
-        self.messages = response.errors
+        self.status_code = response.status_code
+        self.message = None
+        self.code = None
+        if len(response.errors) > 0 and 'message' in response.errors[0] and 'extensions' in response.errors[
+            0] and 'code' in response.errors[0]['extensions']:
+            self.message = response.errors[0]['message']
+            self.code = response.errors[0]['extensions']['code']
 
     def __str__(self):
-        return ''.join(f"{error['extensions']['code']}:\n{error['message']}\n " for error in self.messages)
+        return f'{self.code}: {self.message}'

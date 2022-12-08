@@ -50,7 +50,7 @@ class TestDirectus(unittest.TestCase):
                     print("context.exception")
                     self.assertIsNone(directus._token)
             except DirectusException as e:
-                print(e)
+                print(e.message)
                 raise e
 
     # Path: directus_request.py
