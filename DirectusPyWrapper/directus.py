@@ -20,10 +20,11 @@ class BearerAuth(requests.auth.AuthBase):
 
 
 class Directus:
-    def __init__(self, url, email=None, password=None, token=None, session: requests.Session = None):
+    def __init__(self, url, email=None, password=None, token=None, refresh_token=None,
+                 session: requests.Session = None):
         self.expires = None
         self.expiration_time = None
-        self.refresh_token = None
+        self.refresh_token = refresh_token
         self.url: str = url
         self._token: Optional[str] = None
         self.email = email
