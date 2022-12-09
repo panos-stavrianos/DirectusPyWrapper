@@ -42,6 +42,8 @@ class Directus:
 
     def read_me(self):
         return DirectusRequest(self, "directus_users").read_one("me")
+    def read_settings(self):
+        return DirectusRequest(self, "directus_settings").read_many(method='get')
 
     def __enter__(self):
         return self

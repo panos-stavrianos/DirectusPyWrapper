@@ -60,6 +60,14 @@ class TestDirectus(unittest.TestCase):
             print(directus.user)
             self.assertNotEqual(token, directus.token)
 
+    def test_read_settings(self):
+        with Directus(url, email, password) as directus:
+            response: DirectusResponse = directus.read_settings()
+            print(response.errors)
+            print(response.item)
+            self.assertTrue(response.is_success)
+            self.assertIsNotNone(response.item)
+
     # Path: directus_request.py
     def test_read_one(self):
         with Directus(url) as directus:
