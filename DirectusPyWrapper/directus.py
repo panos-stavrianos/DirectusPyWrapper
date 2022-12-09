@@ -19,6 +19,12 @@ class BearerAuth(requests.auth.AuthBase):
         return r
 
 
+def parse_translations(all_translations: list[dict]) -> dict[str, dict[str, str]]:
+    return {translations['key']: {translation['languages_code']: translation['translation']
+                                  for translation in
+                                  translations['translations']} for translations in all_translations}
+
+
 class Directus:
     def __init__(self, url, email=None, password=None, token=None, refresh_token=None,
                  session: requests.Session = None):
@@ -48,6 +54,15 @@ class Directus:
 
     def update_settings(self, data):
         return DirectusRequest(self, "directus_settings").update_one(None, data)
+
+    def read_translations(self) -> dict[str, dict[str, str]]:
+        items = self.items("translations").fields('key', 'translations.languages_code',
+                                                  'translations.translation').read_many().items
+        print(items)
+        return parse_translations(items)
+
+    def create_translations(self, keys: list[str]):
+        return self.items("translations").create_many([{"key": key} for key in keys])
 
     def __enter__(self):
         return self

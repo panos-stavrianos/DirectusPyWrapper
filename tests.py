@@ -68,6 +68,15 @@ class TestDirectus(unittest.TestCase):
             self.assertTrue(response.is_success)
             self.assertIsNotNone(response.item)
 
+    def test_read_translations(self):
+        with Directus(url, email, password) as directus:
+            translations = directus.read_translations()
+            print(translations)
+
+    def test_create_translation(self):
+        with Directus(url, email, password) as directus:
+            directus.create_translations(["directus!4","directus!3"])
+
     # Path: directus_request.py
     def test_read_one(self):
         with Directus(url) as directus:
