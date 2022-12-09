@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import json
-from typing import Any
+from typing import Any, TypeVar, List
 
 import requests
+from pydantic import BaseModel, parse_obj_as
 
 
 class DirectusResponse:
+    T = TypeVar("T", bound=BaseModel)
+
     def __init__(self, response: requests.Response, query: dict = None):
         self.response: requests.Response = response
         self.query: dict = query
@@ -18,24 +21,27 @@ class DirectusResponse:
             self.json = {}
 
     @property
-    def item(self) -> dict[Any, Any] | None | Any:
+    def item(self, T=None) -> T | dict[Any, Any] | None | Any:  # noqa
+        if 'data' not in self.json:
+            return None
+
+        if not isinstance(self.json['data'], list):
+            return self.json['data'] if T is None else T(**self.json['data'])
+        if len(self.json['data']) == 0:
+            return None
+        return self.json['data'][0] if T is None else T(**self.json['data'][0])
+
+    @property
+    def first(self, T=None) -> T | dict[Any, Any] | None | Any:  # noqa
+        return self.item(T)
+
+    @property
+    def items(self,T=None) -> list[T] |list[dict[Any, Any]] | None | Any: # noqa
         if 'data' not in self.json:
             return None
         if not isinstance(self.json['data'], list):
-            return self.json['data']
-        return None if len(self.json['data']) == 0 else self.json['data'][0]
-
-    @property
-    def first(self) -> dict:
-        return self.item
-
-    @property
-    def items(self) -> list[Any] | None | Any:
-        if 'data' not in self.json:
-            return None
-        if not isinstance(self.json['data'], list):
-            return [self.json['data']]
-        return None if len(self.json['data']) == 0 else self.json['data']
+            return [self.json['data']] if T is None else parse_obj_as(List[T], [self.json['data']])
+        return self.json['data'] if T is None else parse_obj_as(List[T], self.json['data'])
 
     @property
     def total_count(self) -> int:
