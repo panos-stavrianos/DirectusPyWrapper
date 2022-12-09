@@ -42,10 +42,12 @@ class Directus:
 
     def read_me(self):
         return DirectusRequest(self, "directus_users").read_one("me")
+
     def read_settings(self):
         return DirectusRequest(self, "directus_settings").read_many(method='get')
-    def update_settings(self):
-        return DirectusRequest(self, "directus_settings").update_one()
+
+    def update_settings(self, data):
+        return DirectusRequest(self, "directus_settings").update_one(None, data)
 
     def __enter__(self):
         return self
