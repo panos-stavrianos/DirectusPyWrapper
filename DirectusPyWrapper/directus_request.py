@@ -108,8 +108,11 @@ class DirectusRequest:
         response = self.directus.session.post(self.uri, json=items, auth=self.directus.auth)
         return DirectusResponse(response)
 
-    def update_one(self, id: int | str, item: dict) -> DirectusResponse:
-        response = self.directus.session.patch(f'{self.uri}/{id}', json=item, auth=self.directus.auth)
+    def update_one(self, id: int | str | None, item: dict) -> DirectusResponse:
+        if id is None:
+            response = self.directus.session.post(self.uri, json=item, auth=self.directus.auth)
+        else:
+            response = self.directus.session.patch(f'{self.uri}/{id}', json=item, auth=self.directus.auth)
         return DirectusResponse(response)
 
     def update_many(self, ids: list[int | str], items) -> DirectusResponse:
