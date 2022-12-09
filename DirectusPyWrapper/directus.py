@@ -91,7 +91,6 @@ class Directus:
         }
         r = self.session.post(url, json=payload)
         response = DirectusResponse(r)
-        print(response.item)
         self.token = response.item['access_token']
         self.refresh_token = response.item['refresh_token']
         self.expires = response.item['expires']
