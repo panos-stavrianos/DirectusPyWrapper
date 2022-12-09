@@ -1,17 +1,23 @@
 from typing import Optional
+from uuid import UUID
 
 from pydantic import BaseModel
 
 
+class Role(BaseModel):
+    id: Optional[UUID]
+    name: Optional[str]
+
+
 class User(BaseModel):
-    avatar: Optional[str]
-    company: Optional[str]
+    id: Optional[UUID]
+    first_name: Optional[str]
+    last_name: Optional[str]
+    avatar: Optional[UUID]
     description: Optional[str]
     email: Optional[str]
-    first_name: Optional[str]
-    id: Optional[str]
-    last_name: Optional[str]
-    role: Optional[str]
+    role: Optional[UUID] | Optional[Role]
     status: Optional[str]
     title: Optional[str]
     token: Optional[str]
+    company: Optional[str]
