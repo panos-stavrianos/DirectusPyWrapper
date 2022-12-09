@@ -31,17 +31,21 @@ class DirectusResponse:
             return None
         return self.json['data'][0] if T is None else T(**self.json['data'][0])
 
-    @property
-    def first(self, T=None) -> T | dict[Any, Any] | None | Any:  # noqa
-        return self.item(T)
+    def item_as(self, T) -> T | None:  # noqa
+        item_data = self.item
+        return None if item_data is None else T(**item_data)
 
     @property
-    def items(self,T=None) -> list[T] |list[dict[Any, Any]] | None | Any: # noqa
+    def items(self) -> list[dict[Any, Any]] | None | Any:  # noqa
         if 'data' not in self.json:
             return None
         if not isinstance(self.json['data'], list):
-            return [self.json['data']] if T is None else parse_obj_as(List[T], [self.json['data']])
-        return self.json['data'] if T is None else parse_obj_as(List[T], self.json['data'])
+            return [self.json['data']]
+        return self.json['data'] if len(self.json['data']) > 0 else None
+
+    def items_as(self, T) -> list[T] | None:  # noqa
+        items_data = self.items
+        return None if items_data is None else parse_obj_as(List[T], items_data)
 
     @property
     def total_count(self) -> int:
