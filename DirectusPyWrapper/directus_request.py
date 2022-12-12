@@ -66,6 +66,10 @@ class DirectusRequest:
         self.params['sort'].append(f'{"" if asc else "-"}{field}')
         return self
 
+    def search(self, search: int = 1):
+        self.params['search'] = search
+        return self
+
     def page(self, page: int = 1):
         self.params['page'] = page
         return self

@@ -75,7 +75,7 @@ class TestDirectus(unittest.TestCase):
 
     def test_create_translation(self):
         with Directus(url, email, password) as directus:
-            directus.create_translations(["directus!4","directus!3"])
+            directus.create_translations(["directus!4", "directus!3"])
 
     # Path: directus_request.py
     def test_read_one(self):
@@ -125,6 +125,16 @@ class TestDirectus(unittest.TestCase):
                 .read_many()
             print(response.errors)
             print("counts", response.filtered_count, response.total_count)
+            print(response.items)
+            self.assertTrue(response.is_success)
+            self.assertIsNotNone(response.items)
+
+    def test_search(self):
+        with Directus(url, email, password) as directus:
+            response: DirectusResponse = directus.items('directus_users') \
+                .search("Stavrianos") \
+                .read_many()
+            print(response.errors)
             print(response.items)
             self.assertTrue(response.is_success)
             self.assertIsNotNone(response.items)
