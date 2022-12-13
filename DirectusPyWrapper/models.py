@@ -20,4 +20,3 @@ class User(BaseModel):
     status: Optional[str]
     title: Optional[str]
     token: Optional[str]
-    company: Optional[str]
