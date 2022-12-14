@@ -95,7 +95,7 @@ class DirectusRequest:
         return self
 
     def read_one(self, id: int | str) -> DirectusResponse:
-        response = self.directus.session.get(f'{self.uri}/{id}', auth=self.directus.auth)
+        response = self.directus.session.get(f'{self.uri}/{id}', params=self.params, auth=self.directus.auth)
         return DirectusResponse(response)
 
     def read_many(self, method="search") -> DirectusResponse:
