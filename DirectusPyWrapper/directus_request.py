@@ -90,6 +90,10 @@ class DirectusRequest:
         self.params['aggregate'] = {operator.value: field}
         return self
 
+    def group_by(self, *fields):
+        self.params['groupBy'] = ','.join(fields)
+        return self
+
     def read_one(self, id: int | str) -> DirectusResponse:
         response = self.directus.session.get(f'{self.uri}/{id}', auth=self.directus.auth)
         return DirectusResponse(response)

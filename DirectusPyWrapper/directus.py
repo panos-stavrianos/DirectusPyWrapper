@@ -62,7 +62,6 @@ class Directus:
     def read_translations(self) -> dict[str, dict[str, str]]:
         items = self.items("translations").fields('key', 'translations.languages_code',
                                                   'translations.translation').read_many().items
-        print(items)
         return parse_translations(items)
 
     def create_translations(self, keys: list[str]):
