@@ -49,6 +49,11 @@ class DirectusResponse:
         item_data = self._parse_item_as_dict()
         return None if item_data is None else T(**item_data)
 
+    def item_as_dict(self) -> dict | None:  # noqa
+        if 'data' not in self.json or self.json['data'] in [None, [], {}]:
+            return None
+        return self._parse_item_as_dict()
+
     @property
     def items(self) -> list[dict[Any, Any]] | None | Any:  # noqa
         if 'data' not in self.json or self.json['data'] in [None, [], {}]:
@@ -61,6 +66,11 @@ class DirectusResponse:
     def items_as(self, T) -> list[T] | None:  # noqa
         items_data = self._parse_items_as_dict()
         return None if items_data is None else parse_obj_as(List[T], items_data)
+
+    def items_as_dict(self) -> dict | None:  # noqa
+        if 'data' not in self.json or self.json['data'] in [None, [], {}]:
+            return None
+        return self._parse_items_as_dict()
 
     @property
     def total_count(self) -> int:
