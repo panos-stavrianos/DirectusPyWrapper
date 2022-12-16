@@ -15,11 +15,12 @@ from DirectusPyWrapper.operators import Operators
 
 class DirectusRequest:
 
-    def __init__(self, directus: "Directus", collection: str):
+    def __init__(self, directus: "Directus", collection: str, collection_class=None):
         json_fix.fix_it()
         self.directus: "Directus" = directus
         self.collection: str = collection
         self.params: dict = {}
+        self.collection_class = collection_class
 
     @property
     def uri(self):
@@ -120,22 +121,22 @@ class DirectusRequest:
             response = self.directus.session.get(url, params=self.params, auth=self.directus.auth)
         else:
             raise ValueError(f"Method '{method}' not supported")
-        return DirectusResponse(response, self.params, self.directus.collection_class)
+        return DirectusResponse(response, self.params, self.collection_class)
 
     def create_one(self, item: dict) -> DirectusResponse:
         response = self.directus.session.post(self.uri, json=item, auth=self.directus.auth)
-        return DirectusResponse(response, self.directus.collection_class)
+        return DirectusResponse(response, self.collection_class)
 
     def create_many(self, items: list[dict]) -> DirectusResponse:
         response = self.directus.session.post(self.uri, json=items, auth=self.directus.auth)
-        return DirectusResponse(response, self.directus.collection_class)
+        return DirectusResponse(response, self.collection_class)
 
     def update_one(self, id: int | str | None, item: dict) -> DirectusResponse:
         if id is None:
             response = self.directus.session.patch(self.uri, json=item, auth=self.directus.auth)
         else:
             response = self.directus.session.patch(f'{self.uri}/{id}', json=item, auth=self.directus.auth)
-        return DirectusResponse(response, self.directus.collection_class)
+        return DirectusResponse(response, self.collection_class)
 
     def update_many(self, ids: list[int | str], items) -> DirectusResponse:
         payload = {
@@ -143,12 +144,12 @@ class DirectusRequest:
             "data": items
         }
         response = self.directus.session.patch(self.uri, json=payload, auth=self.directus.auth)
-        return DirectusResponse(response, self.directus.collection_class)
+        return DirectusResponse(response, self.collection_class)
 
     def delete_one(self, id: int | str) -> DirectusResponse:
         response = self.directus.session.delete(f'{self.uri}/{id}', auth=self.directus.auth)
-        return DirectusResponse(response, self.directus.collection_class)
+        return DirectusResponse(response, self.collection_class)
 
     def delete_many(self, ids: list[int | str]) -> DirectusResponse:
         response = self.directus.session.delete(self.uri, json=ids, auth=self.directus.auth)
-        return DirectusResponse(response, self.directus.collection_class)
+        return DirectusResponse(response, self.collection_class)
