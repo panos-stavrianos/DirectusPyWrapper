@@ -67,7 +67,7 @@ class DirectusResponse:
         items_data = self._parse_items_as_dict()
         return None if items_data is None else parse_obj_as(List[T], items_data)
 
-    def items_as_dict(self) -> dict | None:  # noqa
+    def items_as_dict(self) -> list[dict] | None:  # noqa
         if 'data' not in self.json or self.json['data'] in [None, [], {}]:
             return None
         return self._parse_items_as_dict()
