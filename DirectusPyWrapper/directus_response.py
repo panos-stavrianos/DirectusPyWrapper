@@ -14,7 +14,6 @@ class DirectusResponse:
         self.response: requests.Response = response
         self.query: dict = query
         self.collection: Any = collection
-        print(self.collection)
         try:
             self.json: dict = response.json()
             if self.is_error:

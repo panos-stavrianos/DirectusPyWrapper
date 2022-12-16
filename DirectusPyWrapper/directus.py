@@ -51,7 +51,6 @@ class Directus:
         return self.items(directus_collection.Config.collection, directus_collection)
 
     def items(self, collection, directus_collection=None) -> DirectusRequest:
-        print(directus_collection)
         return DirectusRequest(self, collection, directus_collection)
 
     def read_me(self):
