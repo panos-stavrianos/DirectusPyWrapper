@@ -48,10 +48,11 @@ class Directus:
 
     def collection(self, directus_collection) -> DirectusRequest:
         assert directus_collection.Config.collection is not None
-        return self.items(directus_collection.Config.collection,directus_collection)
+        return self.items(directus_collection.Config.collection, directus_collection)
 
-    def items(self, collection, as_class=None) -> DirectusRequest:
-        return DirectusRequest(self, collection)
+    def items(self, collection, directus_collection=None) -> DirectusRequest:
+        print(directus_collection)
+        return DirectusRequest(self, collection, directus_collection)
 
     def read_me(self):
         return DirectusRequest(self, "directus_users").read("me")
