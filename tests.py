@@ -81,7 +81,7 @@ class TestDirectus(unittest.TestCase):
     def test_read_one(self):
         with Directus(url) as directus:
             directus.token = token
-            response: DirectusResponse = directus.items('directus_users').read_one(
+            response: DirectusResponse = directus.items('directus_users').read(
                 "5c4a0fbc-d454-4094-bbf4-5f72f4e57098")
             print(response.errors)
             print(response.item)
@@ -122,7 +122,7 @@ class TestDirectus(unittest.TestCase):
                 .sort('first_name', True) \
                 .limit(3) \
                 .include_count() \
-                .read_many()
+                .read()
             print(response.errors)
             print("counts", response.filtered_count, response.total_count)
             print(response.items)
@@ -133,7 +133,7 @@ class TestDirectus(unittest.TestCase):
         with Directus(url, email, password) as directus:
             response: DirectusResponse = directus.items('directus_users') \
                 .search("Stavrianos") \
-                .read_many()
+                .read()
             print(response.errors)
             print(response.items)
             self.assertTrue(response.is_success)

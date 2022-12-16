@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Optional
+
 import json_fix
 
 from DirectusPyWrapper._and import _and
@@ -94,16 +96,28 @@ class DirectusRequest:
         self.params['groupBy'] = ','.join(fields)
         return self
 
-    def read_one(self, id: int | str) -> DirectusResponse:
-        response = self.directus.session.get(f'{self.uri}/{id}', params=self.params, auth=self.directus.auth)
-        return DirectusResponse(response)
+    # def read_one(self, id: int | str) -> DirectusResponse:
+    #     response = self.directus.session.get(f'{self.uri}/{id}', params=self.params, auth=self.directus.auth)
+    #     return DirectusResponse(response)
+    #
+    # def read_many(self, method="search") -> DirectusResponse:
+    #     if method == "search":
+    #         response = self.directus.session.request("search", self.uri, json={"query": self.params},
+    #                                                  auth=self.directus.auth)
+    #     elif method == "get":
+    #         response = self.directus.session.get(self.uri, params=self.params, auth=self.directus.auth)
+    #     else:
+    #         raise ValueError(f"Method '{method}' not supported")
+    #     return DirectusResponse(response, self.params)
 
-    def read_many(self, method="search") -> DirectusResponse:
+    def read(self, id: Optional[int | str]=None, method="search") -> DirectusResponse:
+        method = "get" if id is not None else method
         if method == "search":
             response = self.directus.session.request("search", self.uri, json={"query": self.params},
                                                      auth=self.directus.auth)
         elif method == "get":
-            response = self.directus.session.get(self.uri, params=self.params, auth=self.directus.auth)
+            url = f'{self.uri}/{id}' if id is not None else self.uri
+            response = self.directus.session.get(url, params=self.params, auth=self.directus.auth)
         else:
             raise ValueError(f"Method '{method}' not supported")
         return DirectusResponse(response, self.params)

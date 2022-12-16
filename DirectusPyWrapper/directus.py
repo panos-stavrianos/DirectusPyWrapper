@@ -23,7 +23,6 @@ def parse_translations(all_translations: list[dict]) -> dict[str, dict[str, str]
     if all_translations is None or not all_translations:
         return None
 
-
     return {translations['key']: {translation['languages_code']: translation['translation']
                                   for translation in
                                   translations['translations']} for translations in all_translations}
@@ -51,17 +50,17 @@ class Directus:
         return DirectusRequest(self, collection)
 
     def read_me(self):
-        return DirectusRequest(self, "directus_users").read_one("me")
+        return DirectusRequest(self, "directus_users").read("me")
 
     def read_settings(self):
-        return DirectusRequest(self, "directus_settings").read_many(method='get')
+        return DirectusRequest(self, "directus_settings").read(method='get')
 
     def update_settings(self, data):
         return DirectusRequest(self, "directus_settings").update_one(None, data)
 
     def read_translations(self) -> dict[str, dict[str, str]]:
         items = self.items("translations").fields('key', 'translations.languages_code',
-                                                  'translations.translation').read_many().items
+                                                  'translations.translation').read().items
         return parse_translations(items)
 
     def create_translations(self, keys: list[str]):
