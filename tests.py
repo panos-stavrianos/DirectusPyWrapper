@@ -13,6 +13,7 @@ from DirectusPyWrapper.aggregation_operators import AggregationOperators
 from DirectusPyWrapper.directus_response import DirectusResponse, DirectusException
 from DirectusPyWrapper.filter import Filter
 from DirectusPyWrapper.logical_operators import LogicalOperators
+from DirectusPyWrapper.models import User
 from DirectusPyWrapper.operators import Operators
 
 load_dotenv()
@@ -93,6 +94,14 @@ class TestDirectus(unittest.TestCase):
             response: DirectusResponse = directus.read_me()
             print(response.errors)
             print(response.item)
+            self.assertTrue(response.is_success)
+            self.assertIsNotNone(response.item)
+
+    def test_read_as_object(self):
+        with Directus(url, email, password) as directus:
+            response: DirectusResponse = directus.collection(User).read()
+            print(response.errors)
+            print(response.items)
             self.assertTrue(response.is_success)
             self.assertIsNotNone(response.item)
 

@@ -43,8 +43,14 @@ class Directus:
         self.auth = BearerAuth(self._token)
         self.token = self.static_token or None
         self._user: User | None = None
+        self.collection_class = None
         if self.email and self.password:
             self.login()
+
+    def collection(self, directus_collection) -> DirectusRequest:
+        assert directus_collection.Config.collection is not None
+        self.collection_class = directus_collection
+        return self.items(directus_collection.Config.collection)
 
     def items(self, collection):
         return DirectusRequest(self, collection)

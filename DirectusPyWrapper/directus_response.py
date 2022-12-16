@@ -10,9 +10,10 @@ from pydantic import BaseModel, parse_obj_as
 class DirectusResponse:
     T = TypeVar("T", bound=BaseModel)
 
-    def __init__(self, response: requests.Response, query: dict = None):
+    def __init__(self, response: requests.Response, query: dict = None, collection: Any = None):
         self.response: requests.Response = response
         self.query: dict = query
+        self.collection: Any = collection
         try:
             self.json: dict = response.json()
             if self.is_error:
@@ -20,31 +21,45 @@ class DirectusResponse:
         except json.decoder.JSONDecodeError:
             self.json = {}
 
-    @property
-    def item(self, T=None) -> T | dict[Any, Any] | None | Any:  # noqa
-        if 'data' not in self.json:
-            return None
+    def _parse_item_as_dict(self) -> dict:
+        if isinstance(self.json['data'], list):
+            return self.json['data'][0]
+        return self.json['data']
 
-        if not isinstance(self.json['data'], list):
-            return self.json['data'] if T is None else T(**self.json['data'])
-        if len(self.json['data']) == 0:
+    def _parse_item_as_object(self, T) -> T:
+        return T(**self._parse_item_as_dict())
+
+    def _parse_items_as_dict(self) -> list[dict]:
+        if isinstance(self.json['data'], list):
+            return self.json['data']
+        return [self.json['data']]
+
+    def _parse_items_as_objects(self, T) -> list[T]:
+        return parse_obj_as(List[T], self._parse_items_as_dict())
+
+    @property
+    def item(self) -> dict[Any, Any] | None | Any:  # noqa
+        if 'data' not in self.json or self.json['data'] in [None, [], {}]:
             return None
-        return self.json['data'][0] if T is None else T(**self.json['data'][0])
+        if self.collection:
+            return self._parse_item_as_object(self.collection)
+        return self._parse_item_as_dict()
 
     def item_as(self, T) -> T | None:  # noqa
-        item_data = self.item
+        item_data = self._parse_item_as_dict()
         return None if item_data is None else T(**item_data)
 
     @property
     def items(self) -> list[dict[Any, Any]] | None | Any:  # noqa
-        if 'data' not in self.json:
+        if 'data' not in self.json or self.json['data'] in [None, [], {}]:
             return None
-        if not isinstance(self.json['data'], list):
-            return [self.json['data']]
-        return self.json['data'] if len(self.json['data']) > 0 else None
+        if self.collection:
+            print(self._parse_items_as_objects(self.collection))
+            return self._parse_items_as_objects(self.collection)
+        return self._parse_items_as_dict()
 
     def items_as(self, T) -> list[T] | None:  # noqa
-        items_data = self.items
+        items_data = self._parse_items_as_dict()
         return None if items_data is None else parse_obj_as(List[T], items_data)
 
     @property
