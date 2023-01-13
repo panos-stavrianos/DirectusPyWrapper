@@ -59,7 +59,6 @@ class DirectusResponse:
         if 'data' not in self.json or self.json['data'] in [None, [], {}]:
             return None
         if self.collection:
-            print(self._parse_items_as_objects(self.collection))
             return self._parse_items_as_objects(self.collection)
         return self._parse_items_as_dict()
 
