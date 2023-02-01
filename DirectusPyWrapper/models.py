@@ -1,11 +1,11 @@
 from typing import Optional
-from uuid import UUID
+
 
 from pydantic import BaseModel
 
 
 class Role(BaseModel):
-    id: Optional[UUID]
+    id: Optional[str]
     name: Optional[str]
 
     class Config:
@@ -13,13 +13,13 @@ class Role(BaseModel):
 
 
 class User(BaseModel):
-    id: Optional[UUID]
+    id: Optional[str]
     first_name: Optional[str]
     last_name: Optional[str]
-    avatar: Optional[UUID]
+    avatar: Optional[str]
     description: Optional[str]
     email: Optional[str]
-    role: Optional[UUID] | Optional[Role]
+    role: Optional[str] | Optional[Role]
     status: Optional[str]
     title: Optional[str]
     token: Optional[str]
