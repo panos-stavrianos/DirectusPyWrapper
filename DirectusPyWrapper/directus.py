@@ -15,7 +15,8 @@ class BearerAuth(requests.auth.AuthBase):
         self.token = token
 
     def __call__(self, r):
-        r.headers["authorization"] = f"Bearer {self.token}"
+        if self.token is not None:
+            r.headers["authorization"] = f"Bearer {self.token}"
         return r
 
 
@@ -89,6 +90,7 @@ class Directus:
         return self._user
 
     def login(self):
+
         if self.static_token:
             self._token = self.static_token
             return

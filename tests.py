@@ -1,3 +1,4 @@
+import json
 import os
 import unittest
 from datetime import datetime
@@ -132,7 +133,7 @@ class TestDirectus(unittest.TestCase):
                 .limit(3) \
                 .include_count() \
                 .read()
-            print(response.errors)
+            print(json.dumps(response.query))
             print("counts", response.filtered_count, response.total_count)
             print(response.items)
             self.assertTrue(response.is_success)
@@ -144,6 +145,8 @@ class TestDirectus(unittest.TestCase):
                 .search("Stavrianos") \
                 .read()
             print(response.errors)
+            print(json.dumps(response.query))
+
             print(response.items)
             self.assertTrue(response.is_success)
             self.assertIsNotNone(response.items)
