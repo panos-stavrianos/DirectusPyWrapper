@@ -68,6 +68,9 @@ class Directus:
                                                   'translations.translation').read().items
         return parse_translations(items)
 
+    def download_file(self, file_id):
+        return self.session.get(f'{self.url}/assets/{file_id}')
+
     def create_translations(self, keys: list[str]):
         return self.items("translations").create_many([{"key": key} for key in keys])
 
