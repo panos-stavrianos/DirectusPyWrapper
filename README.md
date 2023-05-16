@@ -132,7 +132,7 @@ If you go with the second option, you will get the responses as `Pydantic` model
 
 ## Reading Data
 
-When you have the DirectusRequest object you can use the `read` method to get the data
+When you have the DirectusRequest object you can use the `read` method to get the data.
 This will return a DirectusResponse object which contains the data.
 
 ```python
@@ -140,8 +140,6 @@ directus.items("directus_users").read()
 ```
 
 ### Filtering
-
-You can filter the data by passing a `Filter` object to the `filter` method
 
 For an easy equality filter you can pass the field name and the value
 
@@ -160,7 +158,7 @@ directus.items("directus_users")
 Using it like this you chain the filters with `AND` operator
 
 > Filtering is a little complicated, and it deserves its own section
-> so please check the [Filtering](#filtering) section for more details
+> so a full guide will be added soon
 
 ### Sorting
 
@@ -343,6 +341,22 @@ directus.items("directus_users").delete_one(1)
 ```python
 directus.items("directus_users").delete_many([1, 2])
 ```
+
+## Roadmap
+
+- [ ] Develop comprehensive documentation and examples using the GitHub wiki.
+- [ ] Prepare a detailed filtering guide to assist users in utilizing filtering capabilities effectively.
+- [ ] Enhance testing procedures by dividing tests into multiple files for better organization.
+- [ ] Implement support for `Pydantic` models in the create, update, and delete methods to facilitate structured data handling.
+- [ ] Explore possibilities to leverage `Pydantic` models for filtering, sorting, grouping, searching, and selecting specific fields, enhancing the flexibility and functionality of the library.
+
+    Something like this:
+    
+    ```python
+    directus.items("directus_users").filter(User.first_name == "John").read()
+    ```
+
+
 
 ## Contributing
 
