@@ -73,7 +73,7 @@ Another way is to use the `with` statement to automatically logout when the sess
 
 ```python
 with Directus(url, email, password) as directus:
-# do stuff
+    # do stuff
 ```
 
 ### Multiple Users in the Same Session
