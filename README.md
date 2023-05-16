@@ -12,6 +12,17 @@ easy-to-use interface for performing CRUD operations, querying data, and managin
 - Creating, updating, and deleting items in Directus collections
 - Handling multiple users in the same session
 
+Dependencies:
+- [Pydantic](https://pydantic-docs.helpmanual.io/): This library leverages Pydantic for data validation and parsing. Pydantic is a powerful tool in Python for ensuring data integrity and handling data validation with ease.
+
+- [Requests](https://docs.python-requests.org/en/master/): The library utilizes Requests, a widely-used HTTP library, for making HTTP requests. Requests simplifies the process of interacting with web services and APIs.
+
+> Directus API:
+> This library interacts with the [Directus API](https://docs.directus.io/reference/introduction.html).
+> 
+> To make the most of this library, it is highly recommended to familiarize yourself with the Directus API documentation. Understanding the API's capabilities and endpoints will help you effectively utilize this library for seamless integration with Directus.
+
+
 ## Disclaimer:
 
 **Please note that DirectusPyWrapper is currently under active development and may not be suitable for
@@ -347,6 +358,7 @@ directus.items("directus_users").delete_many([1, 2])
 - [ ] Develop comprehensive documentation and examples using the GitHub wiki.
 - [ ] Prepare a detailed filtering guide to assist users in utilizing filtering capabilities effectively.
 - [ ] Enhance testing procedures by dividing tests into multiple files for better organization.
+- [ ] Async Support: Introduce async functionality to the library, enabling users to leverage asynchronous programming for enhanced performance and responsiveness. This entails integrating async-compatible HTTP libraries and designing an intuitive async API that seamlessly integrates with async frameworks and workflows.
 - [ ] Implement support for `Pydantic` models in the create, update, and delete methods to facilitate structured data handling.
 - [ ] Explore possibilities to leverage `Pydantic` models for filtering, sorting, grouping, searching, and selecting specific fields, enhancing the flexibility and functionality of the library.
 
