@@ -155,7 +155,7 @@ class TestDirectus(unittest.TestCase):
     def test_aggregate(self):
         with Directus(url, email, password) as directus:
             response: DirectusResponse = directus.items('directus_users') \
-                .aggregate(AggregationOperators.Count).read_many()
+                .aggregate(AggregationOperators.Count).read()
             print(response.errors)
             print(response.query)
 
