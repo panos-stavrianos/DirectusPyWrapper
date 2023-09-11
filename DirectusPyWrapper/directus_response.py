@@ -4,7 +4,7 @@ import json
 from typing import Any, TypeVar, List
 
 import requests
-from pydantic import BaseModel, parse_obj_as
+from pydantic import BaseModel, parse_obj_as, TypeAdapter
 
 
 class DirectusResponse:
@@ -35,7 +35,7 @@ class DirectusResponse:
         return [self.json['data']]
 
     def _parse_items_as_objects(self, T) -> list[T]:
-        return parse_obj_as(List[T], self._parse_items_as_dict())
+        return TypeAdapter(List[T]).validate_python(self._parse_items_as_dict())
 
     @property
     def item(self) -> dict[Any, Any] | None | Any:  # noqa

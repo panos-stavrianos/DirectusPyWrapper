@@ -43,6 +43,7 @@ class TestDirectus(unittest.TestCase):
 
     def test_login(self):
         with Directus(url, email, password) as directus:
+            print(directus.user)
             self.assertIsNotNone(directus._token)
 
     def test_failed_login(self):
@@ -90,8 +91,7 @@ class TestDirectus(unittest.TestCase):
             self.assertIsNotNone(response.item)
 
     def test_read_me(self):
-        with Directus(url) as directus:
-            directus.token = token
+        with Directus(url, email, password) as directus:
             response: DirectusResponse = directus.read_me()
             print(response.errors)
             print(response.item)
@@ -206,7 +206,7 @@ class TestDirectus(unittest.TestCase):
         # get id of user with first_name = "Python1"
         with Directus(url, email, password) as directus:
             response: DirectusResponse = directus.items('directus_users') \
-                .filter(Operators.Equals, first_name="Python1").read_many()
+                .filter(Operators.Equals, first_name="Python1").read()
             user = response.items[0]
             response: DirectusResponse = directus.items('directus_users') \
                 .delete_one(user['id'])

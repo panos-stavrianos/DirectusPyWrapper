@@ -137,3 +137,4 @@ class Directus:
     def __exit__(self, *args):
         # Exception handling here
         self.logout()
+        self.close_session()
