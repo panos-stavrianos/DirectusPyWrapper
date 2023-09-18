@@ -2,4 +2,5 @@ python-dotenv
 rich
 requests
 json_fix
-pydantic
+pydantic>=2.0.0
+
