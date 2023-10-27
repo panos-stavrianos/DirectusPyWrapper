@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, Union
+
 from pydantic import BaseModel
 
 
@@ -19,7 +20,7 @@ class User(BaseModel):
     avatar: Optional[str] = None
     description: Optional[str] = None
     email: Optional[str] = None
-    role: Optional[str] | Optional[Role] = None
+    role: Union[str, Optional[Role], None] = None
     status: Optional[str] = None
     title: Optional[str] = None
     token: Optional[str] = None
